@@ -129,7 +129,7 @@ if __name__ == "__main__":
     start_page = 0
     end_page = 5
     i = start_page
-    while i<end_page:
+    while i < end_page:
         movie_data = get_budgets(i)
         print("data gotten",i)
         i += 1
