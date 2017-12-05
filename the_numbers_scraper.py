@@ -64,13 +64,12 @@ def get_budgets(offset=0):
 
     # set up page data using beautiful soup
     page_soup = soup(content, "html.parser")
-    chart = page_soup.findAll("center")[0].findAll("table")[0]
+    chart = page_soup.findAll("center")[1].findAll("table")[0]
     budget_data = []
 
     # gets the title, budget, domestic and worldwide gross, and page link for each movie
     bi = 0
     for i, tr in enumerate(chart.findAll("tr")):
-
         if i > 0 and i%2 == 1:
             budget_data.append({"place": bi+1})
             for j, td in enumerate(tr.findAll("td")):
@@ -127,15 +126,12 @@ def get_budgets(offset=0):
 if __name__ == "__main__":
 
     start_page = 0
-    end_page = 5
+    end_page = 10
     i = start_page
     while i < end_page:
         movie_data = get_budgets(i)
         print("data gotten",i)
         i += 1
-        {
-            "title":"Avatar"
-        }
         for movie in movie_data:
             # only store movies that have been in the box office for a week
             if len(movie["daily_earnings"]) > 7:
@@ -145,7 +141,7 @@ if __name__ == "__main__":
                          "release_date": movie["release_date"]}
                 ))) > 0:
                     print("updating")
-                    '''moviedb.find_one_and_update(
+                    moviedb.find_one_and_update(
                         {"title": movie["title"],
                          "movie_href": movie["movie_href"],
                          "release_date": movie["release_date"]
@@ -153,10 +149,10 @@ if __name__ == "__main__":
                             "place": movie["place"],
                             "domestic_gross": movie["domestic_gross"],
                             "worldwide_gross": movie["worldwide_gross"],
-                            "daily_earnings": movie["daily_earnings"]}})'''
+                            "daily_earnings": movie["daily_earnings"]}})
                 else:
                     print("inserting")
-                    # moviedb.insert_one(movie)
+                    moviedb.insert_one(movie)
 
     pprint.pprint(movie_data[0])
     '''
